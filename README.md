@@ -19,3 +19,11 @@ alembic-autogenerate:
 alembic-upgrade:
 	docker-compose exec web /bin/bash -c 'alembic upgrade head'
 
+---
+http://localhost:8003/
+---
+
+alembic -> migrations
+docker-compose exec web alembic revision --autogenerate -m "init" 
+docker-compose exec web alembic downgrade base
+docker-compose exec web alembic downgrade -1

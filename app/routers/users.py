@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
-# from app.database import get_db
+from app.database import get_session
 from sqlmodel import Session
 from app.models import UserCreate, UserResponse, Token
 from app.crud import create_user, create_access_token
@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 @router.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
-def register_user(user: UserCreate, db: Session = Depends(get_db)):
+def register_user(user: UserCreate, db: Session = Depends(get_session)):
     db_user = get_user_by_username(db, user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
@@ -23,7 +23,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post('/login', response_model=Token)
-def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_session)):
     """
     Login using your username and password
     """
