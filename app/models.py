@@ -4,6 +4,15 @@ from sqlmodel import SQLModel, Field
 from pydantic import EmailStr
 
 
+class Token(SQLModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(SQLModel):
+    username: Union[str, None] = None
+
+
 class UserBase(SQLModel):
     first_name: str
     last_name: str
@@ -18,18 +27,7 @@ class UserResponse(UserBase):
     created_at: datetime
 
 
-class UserLogin(SQLModel):
-    username: str
-    password: str
-
-
-class Token(SQLModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(SQLModel):
-    username: Union[str, None] = None
+# Tables
 
 
 class User(UserBase, table=True):
