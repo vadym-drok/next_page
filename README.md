@@ -24,6 +24,8 @@ http://localhost:8003/
 ---
 
 alembic -> migrations
-docker-compose exec web alembic revision --autogenerate -m "init" 
-docker-compose exec web alembic downgrade base
-docker-compose exec web alembic downgrade -1
+docker-compose exec web 
+alembic revision --autogenerate -m "init"
+alembic upgrade head
+alembic downgrade base
+alembic downgrade -1
