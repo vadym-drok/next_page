@@ -4,8 +4,7 @@ from app.database import get_session
 from sqlmodel import Session
 from app.models import UserCreate, UserResponse, Token
 from app.crud import create_user, create_access_token
-from app.utils import authenticate_user, get_user_by_username
-
+from app.utils import authenticate_user, get_user_by_username, get_user_by_email
 
 router = APIRouter(
     prefix='',
@@ -15,9 +14,10 @@ router = APIRouter(
 
 @router.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 def register_user(user: UserCreate, db: Session = Depends(get_session)):
-    db_user = get_user_by_username(db, user.username)
-    if db_user:
+    if get_user_by_username(db, user.username):
         raise HTTPException(status_code=400, detail="Username already registered")
+    if get_user_by_email(db, user.email):
+        raise HTTPException(status_code=400, detail="User with this email already registered")
     new_user = create_user(db, user)
     return new_user
 
