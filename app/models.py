@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Union, Optional, List
-from pydantic import EmailStr
+from pydantic import EmailStr, ConfigDict
 from datetime import datetime
 from sqlmodel import SQLModel, Field, Relationship
 from sqlalchemy import Column, TIMESTAMP, text, Enum as SQLEnum
@@ -25,7 +25,14 @@ class UserCreate(UserBase):
 
 
 class UserResponse(UserBase):
+    id: int
     created_at: datetime
+    first_name: str
+    last_name: str
+    is_active: bool
+    shops: List["Shop"]
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Tables

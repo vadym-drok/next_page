@@ -1,10 +1,10 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Path
 from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_session
 from sqlmodel import Session
-from app.models import UserCreate, UserResponse, Token
+from app.models import UserCreate, UserResponse, Token, User
 from app.crud import create_user, create_access_token, create_shop
-from app.utils import authenticate_user, get_user_by_username, get_user_by_email
+from app.utils import authenticate_user, get_user_by_username, get_user_by_email, verify_access_token
 
 router = APIRouter(
     prefix='',
@@ -38,3 +38,14 @@ def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     }
     access_token = create_access_token(token_data)
     return access_token
+
+
+@router.get('/user_info', response_model=UserResponse)
+def get_user_info(
+        current_user: User = Depends(verify_access_token),
+):
+    """
+    Get information about User
+    """
+
+    return current_user
