@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_session
 from sqlmodel import Session
 from app.models import UserCreate, UserResponse, Token
-from app.crud import create_user, create_access_token
+from app.crud import create_user, create_access_token, create_shop
 from app.utils import authenticate_user, get_user_by_username, get_user_by_email
 
 router = APIRouter(
@@ -19,6 +19,8 @@ def register_user(user: UserCreate, db: Session = Depends(get_session)):
     if get_user_by_email(db, user.email):
         raise HTTPException(status_code=400, detail="User with this email already registered")
     new_user = create_user(db, user)
+    create_shop(db, new_user)
+
     return new_user
 
 

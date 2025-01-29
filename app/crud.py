@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from typing import Union
 from sqlmodel import Session
-from app.models import User,Token
+from app.models import User, Token, Shop
 from app.utils import get_password_hash
 import jwt
 from app.config import settings
@@ -25,3 +25,11 @@ def create_user(db: Session, user_data: dict):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
+def create_shop(db: Session, user: User):
+    shop = Shop(user_id=user.id)
+    db.add(shop)
+    db.commit()
+    db.refresh(shop)
+    return shop

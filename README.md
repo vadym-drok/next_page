@@ -21,6 +21,7 @@ alembic-upgrade:
 
 ---
 http://localhost:8003/
+pgAdmin -> http://127.0.0.1:5050/
 ---
 
 alembic -> migrations
