@@ -24,6 +24,9 @@ http://localhost:8003/
 pgAdmin -> http://127.0.0.1:5050/
 ---
 
+python -m app.cli populate
+
+---
 alembic -> migrations
 	docker-compose exec web alembic 
 		revision --autogenerate -m "init"

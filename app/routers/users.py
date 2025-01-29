@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, status, Path
+from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_session
 from sqlmodel import Session
