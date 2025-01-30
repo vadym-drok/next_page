@@ -35,6 +35,12 @@ class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
 
+class UserEdit(SQLModel):
+    first_name: str
+    last_name: str
+    is_active: bool
+
+
 # Tables
 
 
@@ -50,6 +56,7 @@ class User(UserBase, table=True):
         )
     )
     shops: List["Shop"] = Relationship(back_populates="user")
+    is_superuser: bool = False
 
 
 class Shop(SQLModel, table=True):

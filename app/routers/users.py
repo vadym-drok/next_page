@@ -1,10 +1,10 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Path
 from fastapi.security import OAuth2PasswordRequestForm
 from app.database import get_session
 from sqlmodel import Session
-from app.models import UserCreate, UserResponse, Token, User
+from app.models import UserCreate, UserResponse, Token, User, UserEdit
 from app.crud import create_user, create_access_token, create_shop
-from app.utils import authenticate_user, get_user_by_username, get_user_by_email, verify_access_token
+from app.utils import authenticate_user, get_user_by_username, get_user_by_email, verify_access_token, get_user_by_id
 
 router = APIRouter(
     prefix='',
@@ -40,12 +40,36 @@ def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     return access_token
 
 
-@router.get('/user_info', response_model=UserResponse)
-def get_user_info(
+@router.get('/users/{id}/', response_model=UserResponse)
+def user_info(
+        id: int = Path(description="user id"),
+        db: Session = Depends(get_session),
         current_user: User = Depends(verify_access_token),
 ):
     """
     Get information about User
     """
+
+    return get_user_by_id(db, current_user, id)
+
+
+@router.post('/users/{id}/edit', response_model=UserResponse)
+def edit_user(
+        user_edit_data: UserEdit,
+        id: int = Path(description="user id"),
+        db: Session = Depends(get_session),
+        current_user: User = Depends(verify_access_token),
+):
+    """
+
+    """
+    db_user = get_user_by_id(db, current_user, id)
+    user_data = user_edit_data.dict(exclude_unset=True)
+    for key, value in user_data.items():
+        setattr(db_user, key, value)
+
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
 
     return current_user
