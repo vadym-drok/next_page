@@ -28,7 +28,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_session)):
 @router.post('/login', response_model=Token)
 def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_session)):
     """
-    Login using your username and password
+    Login using your username(or email) and password
     """
     user = authenticate_user(db, login_data.username, login_data.password)
     if not user:
