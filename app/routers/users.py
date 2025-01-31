@@ -6,6 +6,7 @@ from app.models import UserCreate, UserResponse, Token, User, UserEdit
 from app.crud import create_user, create_access_token, create_shop
 from app.utils import authenticate_user, get_user_by_username, get_user_by_email, verify_access_token, get_user_by_id
 
+
 router = APIRouter(
     prefix='',
     tags=['Users'],
@@ -54,7 +55,7 @@ def user_info(
 
 
 @router.post('/users/{id}/edit', response_model=UserResponse)
-def edit_user(
+def user_edit(
         user_edit_data: UserEdit,
         id: int = Path(description="user id"),
         db: Session = Depends(get_session),
@@ -72,4 +73,4 @@ def edit_user(
     db.commit()
     db.refresh(db_user)
 
-    return current_user
+    return db_user

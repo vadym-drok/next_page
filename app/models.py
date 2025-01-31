@@ -41,6 +41,18 @@ class UserEdit(SQLModel):
     is_active: bool
 
 
+
+class ShopEdit(SQLModel):
+    name: Optional[str] = ''
+    is_active: Optional[bool] = False
+
+
+class ShopInfoResponse(ShopEdit):
+    id: int
+    user_id: int
+    products: List["Product"]
+
+
 # Tables
 
 
