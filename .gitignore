@@ -8,3 +8,5 @@
 /.idea/vcs.xml
 /.env
 /.idea/next_page.iml
+/backend/venv/
+/backend/.env
