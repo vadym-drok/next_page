@@ -33,3 +33,6 @@ alembic -> migrations
 		upgrade head
 		downgrade base
 		downgrade -1
+
+---
+npm run dev
