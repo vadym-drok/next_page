@@ -10,3 +10,4 @@
 /.idea/next_page.iml
 /backend/venv/
 /backend/.env
+/.idea/webResources.xml
