@@ -35,4 +35,6 @@ alembic -> migrations
 		downgrade -1
 
 ---
+# Next js
 npm run dev
+https://youtu.be/Zq5fmkH0T78?t=1988

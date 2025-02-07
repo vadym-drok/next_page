@@ -10,15 +10,10 @@ app.include_router(users.router)
 app.include_router(shops.router)
 
 
-origins = [
-    "http://localhost",
-]
-
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['http://localhost:3000'],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
