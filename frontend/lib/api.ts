@@ -27,7 +27,7 @@ export const loginUser = async (credentials) => {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || "Помилка входу");
+        throw new Error(errorData.detail);
     }
 
     return response.json();
@@ -45,3 +45,24 @@ export const getUserInfo = async (id, token) => {
 
     return response.json();
 };
+
+
+export const updateUser = async (id: string, token: string, userData: any) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/edit`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to update user data");
+    }
+
+    return response.json();
+};
+
+
