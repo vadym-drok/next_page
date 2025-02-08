@@ -23,7 +23,6 @@ export default function LoginPage() {
       const decodedToken = JSON.parse(atob(tokenParts[1]));
 
       const userId = decodedToken.user_id;
-      console.log("User ID:", userId);
 
       router.push(`/users/${userId}`);
     } catch (err) {
