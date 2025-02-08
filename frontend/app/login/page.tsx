@@ -37,7 +37,7 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input type="text" name="username" placeholder="Username or Email" value={formData.username} onChange={handleChange} required className="w-full p-2 border" />
         <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required className="w-full p-2 border" />
-        <button type="submit" className="w-full p-2 bg-blue-500 text-white">Увійти</button>
+        <button type="submit" className="w-full p-2 bg-blue-500 text-white">Sing in</button>
       </form>
     </div>
   );

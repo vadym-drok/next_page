@@ -33,7 +33,7 @@ export default function HomePage() {
       ) : (
         <div className="flex space-x-2">
           <button onClick={() => router.push("/login")} className="p-2 border rounded">
-            LogIn
+            Login
           </button>
           <button onClick={() => router.push("/register")} className="p-2 border rounded">
             Registration
