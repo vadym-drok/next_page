@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status, Path
 from app.database import get_session
 from sqlmodel import Session
 from app.models import ShopInfoResponse, ShopEdit, User, Shop
-from app.utils import verify_access_token, get_user_by_id
+from app.utils import verify_access_token
 
 
 router = APIRouter(

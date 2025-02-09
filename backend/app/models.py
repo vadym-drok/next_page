@@ -41,7 +41,6 @@ class UserEdit(SQLModel):
     is_active: bool
 
 
-
 class ShopEdit(SQLModel):
     name: Optional[str] = ''
     is_active: Optional[bool] = False

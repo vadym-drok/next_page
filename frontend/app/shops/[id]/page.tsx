@@ -2,19 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getUserInfo, updateUser } from "@/lib/api";
+import { getShopInfo, updateShop } from "@/lib/api";
 
-export default function ProfilePage() {
+export default function ShopPage() {
   const { id } = useParams();
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [shop, setShop] = useState(null);
   const [error, setError] = useState("");
-  const [editData, setEditData] = useState({ first_name: "", last_name: "", is_active: false });
+  const [editData, setEditData] = useState({ name: "", is_active: false });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchShop = async () => {
       const token = localStorage.getItem("access_token");
       if (!token) {
         router.push("/login");
@@ -22,19 +22,18 @@ export default function ProfilePage() {
       }
 
       try {
-        const userData = await getUserInfo(id, token);
-        setUser(userData);
+        const shopData = await getShopInfo(id, token);
+        setShop(shopData);
         setEditData({
-          first_name: userData.first_name || "",
-          last_name: userData.last_name || "",
-          is_active: userData.is_active || false,
+          name: shopData.name || "",
+          is_active: shopData.is_active || false,
         });
       } catch (err) {
         setError(err.message);
       }
     };
 
-    fetchUser();
+    fetchShop();
   }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,9 +51,9 @@ export default function ProfilePage() {
 
     try {
       const token = localStorage.getItem("access_token");
-      const updatedUser = await updateUser(id, token, editData);
-      setUser(updatedUser);
-      setMessage("Profile updated successfully!");
+      const updatedShop = await updateShop(id, token, editData);
+      setShop(updatedShop);
+      setMessage("Shop updated successfully!");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,29 +62,20 @@ export default function ProfilePage() {
   };
 
   if (error) return <p className="text-red-500">{error}</p>;
-  if (!user) return <p>Loading...</p>;
+  if (!shop) return <p>Loading...</p>;
 
   return (
     <div className="max-w-md mx-auto mt-10 p-5 border rounded">
-      <h1 className="text-xl font-bold mb-4">User Profile</h1>
-      <p><strong>Username:</strong> {user.username}</p>
-      <p><strong>Email:</strong> {user.email}</p>
+      <h1 className="text-xl font-bold mb-4">Shop Info</h1>
+      <p><strong>Shop ID:</strong> {shop.id}</p>
+      <p><strong>Owner ID:</strong> {shop.user_id}</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mt-4">
         <input
           type="text"
-          name="first_name"
-          placeholder="First Name"
-          value={editData.first_name}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border"
-        />
-        <input
-          type="text"
-          name="last_name"
-          placeholder="Last Name"
-          value={editData.last_name}
+          name="name"
+          placeholder="Shop Name"
+          value={editData.name}
           onChange={handleChange}
           required
           className="w-full p-2 border"
@@ -104,31 +94,19 @@ export default function ProfilePage() {
           className="w-full p-2 bg-blue-500 text-white"
           disabled={loading}
         >
-          {loading ? "Updating..." : "Update Profile"}
+          {loading ? "Updating..." : "Update Shop"}
         </button>
       </form>
 
       {message && <p className="text-green-500 mt-2">{message}</p>}
+
+      {/* Button to return to user profile */}
       <button
-        onClick={() => { localStorage.removeItem("access_token"); router.push("/login"); }}
-        className="w-full mt-4 p-2 bg-red-500 text-white"
+        onClick={() => router.push(`/users/${shop.user_id}`)}
+        className="w-full mt-4 p-2 bg-gray-500 text-white"
       >
-        Log Out
+        Back to Profile
       </button>
-     {user.shops && user.shops.length > 0 && (
-      <div className="mt-4">
-        <h2 className="text-lg font-bold mb-2">Shops</h2>
-        {user.shops.map((shop) => (
-          <button
-            key={shop.id}
-            onClick={() => router.push(`/shops/${shop.id}`)}
-            className="w-full p-2 mb-2 bg-green-500 text-white rounded"
-          >
-            Manage Shop: {shop.name || `Shop #${shop.id}`}
-          </button>
-        ))}
-      </div>
-    )}
     </div>
   );
 }
