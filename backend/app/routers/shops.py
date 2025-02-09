@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, HTTPException, Depends, status, Path
 from app.database import get_session
 from sqlmodel import Session
@@ -51,3 +53,16 @@ def shop_edit(
     db.refresh(db_shop)
 
     return db_shop
+
+
+@router.get('/shops', response_model=List[ShopInfoResponse])
+def shops(
+        db: Session = Depends(get_session),
+        # TODO search -> name, ...
+):
+    """
+    Get information about all active Shop
+    """
+    active_shops = db.query(Shop).filter(Shop.is_active == True)
+
+    return active_shops

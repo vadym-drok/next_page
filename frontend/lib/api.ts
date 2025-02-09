@@ -110,3 +110,15 @@ export const updateShop = async (id: string, token: string, shopData: any) => {
 };
 
 
+export const getActiveShops = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/shops`, {
+        method: "GET",
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to fetch shops");
+    }
+
+    return response.json();
+};
